@@ -1,69 +1,50 @@
 body {
-  background: linear-gradient(to right, #ffd6e0, #fff0f5);
-  font-family: 'Poppins', sans-serif; /* Clean, modern, and cute */
+  background: linear-gradient(to right, #ffe6f0, #ffe0ec);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 100vh;
   margin: 0;
 }
-
-.chat-container {
-  width: 95%;
-  max-width: 400px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+h1 {
+  color: #d63384;
 }
-
-.header {
-  background-color: #ff4d88;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.chat-box {
-  flex: 1;
-  padding: 16px;
+#chatbox {
+  width: 90%;
+  max-width: 500px;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   overflow-y: auto;
-  height: 400px;
-  font-size: 15px;
-  line-height: 1.6;
+  height: 300px;
+  margin-bottom: 20px;
 }
-
-.input-area {
-  display: flex;
-  border-top: 1px solid #eee;
+.message {
+  margin: 10px 0;
 }
-
-#user-input {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  font-family: inherit;
+.user {
+  text-align: right;
+  color: #007bff;
 }
-
+.bot {
+  text-align: left;
+  color: #d63384;
+}
+input[type="text"] {
+  width: 80%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
 button {
-  background: #ff4d88;
-  color: white;
+  padding: 10px 15px;
   border: none;
-  padding: 12px 20px;
-  font-size: 16px;
+  background-color: #d63384;
+  color: white;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s ease;
-  border-radius: 0 0 20px 0;
 }
-
-button:hover {
-  background: #e63971;
-}
-
