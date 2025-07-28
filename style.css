@@ -48,3 +48,10 @@ button {
   border-radius: 10px;
   cursor: pointer;
 }
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+body {
+  font-family: 'Baloo 2', cursive, sans-serif;
+  background: linear-gradient(to right, #ffe6f0, #ffe0ec);
+  /* আগের মতো বাকি স্টাইল থাকবে */
+}
