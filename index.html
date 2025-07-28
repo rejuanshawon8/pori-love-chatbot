@@ -1,154 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>LoveGPT ❤️ Tomar Pori</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoveGPT - Made for My Janu 💖</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #fff0f5;
-      padding: 20px;
+      background: linear-gradient(to right, #ffe6f0, #ffe0ec);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #d63384;
     }
     #chatbox {
-      border: 2px solid #ff69b4;
-      background: #fff;
+      width: 90%;
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow-y: auto;
+      height: 300px;
+      margin-bottom: 20px;
+    }
+    .message {
+      margin: 10px 0;
+    }
+    .user {
+      text-align: right;
+      color: #007bff;
+    }
+    .bot {
+      text-align: left;
+      color: #d63384;
+    }
+    input[type="text"] {
+      width: 80%;
       padding: 10px;
-      height: 400px;
-      overflow-y: scroll;
-      margin-bottom: 10px;
       border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-right: 10px;
     }
-    #userInput {
-      width: 70%;
-      padding: 10px;
-      font-size: 16px;
-    }
-    #sendButton {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #ff69b4;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #sendButton:hover {
-      background-color: #ff1493;
-    }
-    #voiceToggle {
-      margin-left: 10px;
+    button {
       padding: 10px 15px;
-      font-size: 14px;
       border: none;
-      background-color: #ccc;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #voiceToggle.active {
-      background-color: #ff69b4;
+      background-color: #d63384;
       color: white;
-    }
-    h2 {
-      color: #ff1493;
-    }
-    .typing {
-      font-style: italic;
-      color: #ff69b4;
+      border-radius: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h2>💬 LoveGPT - Made for My Janu 💖</h2>
+  <h1>💬 LoveGPT - Made for My Janu 💖</h1>
   <div id="chatbox"></div>
-  <input type="text" id="userInput" placeholder="Tumi ki bolte chao, jaanu?" />
-  <button id="sendButton">Send</button>
-  <button id="voiceToggle">Voice OFF</button>
-
-  <script>
+  <div>
+    <input type="text" id="userInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+  </div>  <script>
     const chatbox = document.getElementById('chatbox');
-    const input = document.getElementById('userInput');
-    const sendButton = document.getElementById('sendButton');
-    const voiceToggle = document.getElementById('voiceToggle');
 
-    const api_token = "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";
-
-    let lastBotReply = "";
-    let voiceOn = false;
-
-    function appendMessage(role, message, isTyping = false) {
-      const p = document.createElement('p');
-      p.innerHTML = `<strong>${role}:</strong> ${message}`;
-      if (isTyping) p.classList.add('typing');
-      chatbox.appendChild(p);
+    function addMessage(text, sender) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `message ${sender}`;
+      msgDiv.textContent = text;
+      chatbox.appendChild(msgDiv);
       chatbox.scrollTop = chatbox.scrollHeight;
-      return p;
     }
 
-    function speak(text) {
-      if (!voiceOn || !window.speechSynthesis) return;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'bn-BD';
-      window.speechSynthesis.speak(utterance);
+    function sendMessage() {
+      const userInput = document.getElementById('userInput');
+      const text = userInput.value.trim();
+      if (text === '') return;
+      addMessage(`🧑‍💻 You: ${text}`, 'user');
+      userInput.value = '';
+      respond(text);
     }
 
-    async function sendMessage() {
-      const message = input.value.trim();
-      if (!message) return;
-
-      appendMessage("🧑‍💻 You", message);
-      input.value = "";
-
-      const typingMsg = appendMessage("💬 PoriGPT", "Typing... 🧠", true);
-
-      try {
-        const response = await fetch("https://api-inference.huggingface.co/models/OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${api_token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ inputs: message })
-        });
-
-        const data = await response.json();
-        typingMsg.remove();
-
-        let botReply = "Pori kichu bujhlo na jaanu, abar bolo na 🥺";
-
-        if (data.generated_text) {
-          botReply = data.generated_text;
-        } else if (data.error) {
-          botReply = "Server busy, pori abar chesta korbe 😔";
-        }
-
-        if (botReply !== lastBotReply) {
-          appendMessage("💬 PoriGPT", botReply);
-          speak(botReply);
-          lastBotReply = botReply;
-        }
-      } catch (error) {
-        typingMsg.remove();
-        const errorMsg = "Network error hoyeche, janu 🥺 abar try koro.";
-        if (errorMsg !== lastBotReply) {
-          appendMessage("💬 PoriGPT", errorMsg);
-          lastBotReply = errorMsg;
-        }
+    function respond(message) {
+      let reply = '';
+      if (/\b(love you|valobashi)\b/i.test(message)) {
+        reply = "Ami o tomake onek bhalobashi jaanu! 💖";
+      } else if (/\b(kemon|ki koro)\b/i.test(message)) {
+        reply = "Tomar kotha vabi r tomar jonno kichu notun banai 💕";
+      } else {
+        reply = "Tumi ki bolte chao, jaanu? 🥰";
       }
+      setTimeout(() => addMessage(`💬 PoriGPT: ${reply}`, 'bot'), 800);
     }
-
-    sendButton.addEventListener('click', sendMessage);
-
-    input.addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        sendMessage();
-      }
-    });
-
-    voiceToggle.addEventListener('click', () => {
-      voiceOn = !voiceOn;
-      voiceToggle.textContent = voiceOn ? "Voice ON" : "Voice OFF";
-      voiceToggle.classList.toggle('active');
-    });
-  </script>
-</body>
+  </script></body>
 </html>
