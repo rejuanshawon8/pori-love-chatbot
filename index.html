@@ -1,97 +1,19 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>LoveGPT - Made for My Janu 💖</title>
-  <style>
-    body {
-      background: linear-gradient(to right, #ffe6f0, #ffe0ec);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      color: #d63384;
-    }
-    #chatbox {
-      width: 90%;
-      max-width: 500px;
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      overflow-y: auto;
-      height: 300px;
-      margin-bottom: 20px;
-    }
-    .message {
-      margin: 10px 0;
-    }
-    .user {
-      text-align: right;
-      color: #007bff;
-    }
-    .bot {
-      text-align: left;
-      color: #d63384;
-    }
-    input[type="text"] {
-      width: 80%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      margin-right: 10px;
-    }
-    button {
-      padding: 10px 15px;
-      border: none;
-      background-color: #d63384;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>💬 LoveGPT - Made for My Janu 💖</h1>
   <div id="chatbox"></div>
   <div>
-    <input type="text" id="userInput" placeholder="Type your message...">
+    <input type="text" id="userInput" placeholder="Type your message..." />
     <button onclick="sendMessage()">Send</button>
-  </div>  <script>
-    const chatbox = document.getElementById('chatbox');
+  </div>
 
-    function addMessage(text, sender) {
-      const msgDiv = document.createElement('div');
-      msgDiv.className = `message ${sender}`;
-      msgDiv.textContent = text;
-      chatbox.appendChild(msgDiv);
-      chatbox.scrollTop = chatbox.scrollHeight;
-    }
-
-    function sendMessage() {
-      const userInput = document.getElementById('userInput');
-      const text = userInput.value.trim();
-      if (text === '') return;
-      addMessage(`🧑‍💻 You: ${text}`, 'user');
-      userInput.value = '';
-      respond(text);
-    }
-
-    function respond(message) {
-      let reply = '';
-      if (/\b(love you|valobashi)\b/i.test(message)) {
-        reply = "Ami o tomake onek bhalobashi jaanu! 💖";
-      } else if (/\b(kemon|ki koro)\b/i.test(message)) {
-        reply = "Tomar kotha vabi r tomar jonno kichu notun banai 💕";
-      } else {
-        reply = "Tumi ki bolte chao, jaanu? 🥰";
-      }
-      setTimeout(() => addMessage(`💬 PoriGPT: ${reply}`, 'bot'), 800);
-    }
-  </script></body>
+  <script src="script.js"></script>
+</body>
 </html>
