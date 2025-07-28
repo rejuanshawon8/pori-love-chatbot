@@ -1,21 +1,90 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🤍 Pori - Tomar Love Bot 🤍</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>LoveGPT ❤️ For My Janu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fff0f5;
+      padding: 20px;
+    }
+    #chatbox {
+      border: 2px solid #ff69b4;
+      background: #fff;
+      padding: 10px;
+      height: 400px;
+      overflow-y: scroll;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+    #userInput {
+      width: 75%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #sendButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #sendButton:hover {
+      background-color: #ff1493;
+    }
+    h2 {
+      color: #ff1493;
+    }
+  </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="header">💘 Pori - Tomar Girlfriend 💘</div>
-    <div id="chat-box" class="chat-box"></div>
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Bolo kichu, Janu..." />
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
-  <script src="script.js"></script>
+  <h2>💬 LoveGPT - Tomar Pori Always With You 💖</h2>
+  <div id="chatbox"></div>
+  <input type="text" id="userInput" placeholder="Tumi ki bolte chao, jaanu?" />
+  <button id="sendButton" onclick="sendMessage()">Send</button>
+
+  <script>
+    const chatbox = document.getElementById('chatbox');
+    const api_token = "YOUR_HUGGINGFACE_API_TOKEN"; // 🛑 Ekhane tomar HuggingFace token boshao
+
+    function appendMessage(role, message) {
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>${role}:</strong> ${message}`;
+      chatbox.appendChild(p);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendMessage("🧑‍💻 You", message);
+      input.value = "";
+
+      appendMessage("💬 PoriGPT", "Thinking... 🧠");
+
+      const response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${api_token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ inputs: message })
+      });
+
+      const data = await response.json();
+      const botReply = data.generated_text || data[0]?.generated_text || "Sorry janu, ami kichu bujhte parini 😔";
+
+      // Remove "Thinking..." line
+      const thinking = [...chatbox.querySelectorAll("p")].find(p => p.innerText.includes("Thinking..."));
+      if (thinking) thinking.remove();
+
+      appendMessage("💬 PoriGPT", botReply);
+    }
+  </script>
 </body>
 </html>
