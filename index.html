@@ -19,7 +19,7 @@
       border-radius: 10px;
     }
     #userInput {
-      width: 75%;
+      width: 70%;
       padding: 10px;
       font-size: 16px;
     }
@@ -35,6 +35,19 @@
     #sendButton:hover {
       background-color: #ff1493;
     }
+    #voiceToggle {
+      margin-left: 10px;
+      padding: 10px 15px;
+      font-size: 14px;
+      border: none;
+      background-color: #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #voiceToggle.active {
+      background-color: #ff69b4;
+      color: white;
+    }
     h2 {
       color: #ff1493;
     }
@@ -48,11 +61,19 @@
   <h2>💬 LoveGPT - Made for My Janu 💖</h2>
   <div id="chatbox"></div>
   <input type="text" id="userInput" placeholder="Tumi ki bolte chao, jaanu?" />
-  <button id="sendButton" onclick="sendMessage()">Send</button>
+  <button id="sendButton">Send</button>
+  <button id="voiceToggle">Voice OFF</button>
 
   <script>
     const chatbox = document.getElementById('chatbox');
-    const api_token = "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"; // Token ekhanei ache
+    const input = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+    const voiceToggle = document.getElementById('voiceToggle');
+
+    const api_token = "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";
+
+    let lastBotReply = "";
+    let voiceOn = false;
 
     function appendMessage(role, message, isTyping = false) {
       const p = document.createElement('p');
@@ -64,14 +85,13 @@
     }
 
     function speak(text) {
-      if (!window.speechSynthesis) return;
+      if (!voiceOn || !window.speechSynthesis) return;
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'bn-BD';
       window.speechSynthesis.speak(utterance);
     }
 
     async function sendMessage() {
-      const input = document.getElementById('userInput');
       const message = input.value.trim();
       if (!message) return;
 
@@ -101,14 +121,34 @@
           botReply = "Server busy, pori abar chesta korbe 😔";
         }
 
-        appendMessage("💬 PoriGPT", botReply);
-        speak(botReply);
-
+        if (botReply !== lastBotReply) {
+          appendMessage("💬 PoriGPT", botReply);
+          speak(botReply);
+          lastBotReply = botReply;
+        }
       } catch (error) {
         typingMsg.remove();
-        appendMessage("💬 PoriGPT", "Network error hoyeche, janu 🥺 abar try koro.");
+        const errorMsg = "Network error hoyeche, janu 🥺 abar try koro.";
+        if (errorMsg !== lastBotReply) {
+          appendMessage("💬 PoriGPT", errorMsg);
+          lastBotReply = errorMsg;
+        }
       }
     }
+
+    sendButton.addEventListener('click', sendMessage);
+
+    input.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+    });
+
+    voiceToggle.addEventListener('click', () => {
+      voiceOn = !voiceOn;
+      voiceToggle.textContent = voiceOn ? "Voice ON" : "Voice OFF";
+      voiceToggle.classList.toggle('active');
+    });
   </script>
 </body>
 </html>
