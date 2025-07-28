@@ -1,6 +1,6 @@
 body {
   background: linear-gradient(to right, #ffd6e0, #fff0f5);
-  font-family: 'Comic Sans MS', cursive;
+  font-family: 'Poppins', sans-serif; /* Clean, modern, and cute */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@ body {
 .chat-container {
   width: 95%;
   max-width: 400px;
-  background: white;
+  background: #fff;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   display: flex;
@@ -20,24 +20,27 @@ body {
 }
 
 .header {
-  background-color: #ff4081;
+  background-color: #ff4d88;
   color: white;
   text-align: center;
-  padding: 12px;
-  font-size: 20px;
-  font-weight: bold;
+  padding: 14px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .chat-box {
   flex: 1;
-  padding: 15px;
+  padding: 16px;
   overflow-y: auto;
   height: 400px;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .input-area {
   display: flex;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #eee;
 }
 
 #user-input {
@@ -46,13 +49,21 @@ body {
   border: none;
   outline: none;
   font-size: 16px;
+  font-family: inherit;
 }
 
 button {
-  background: #ff4081;
+  background: #ff4d88;
   color: white;
   border: none;
-  padding: 12px 18px;
+  padding: 12px 20px;
   font-size: 16px;
   cursor: pointer;
+  transition: background 0.3s ease;
+  border-radius: 0 0 20px 0;
 }
+
+button:hover {
+  background: #e63971;
+}
+
