@@ -1,25 +1,77 @@
-function generateBotReply(message) {
-  const msg = message.toLowerCase();
-  let reply = "Ami kichu bujhlam na re Janu, abar onek boro kore bolo na 😚";
+<script>
+    const chatbox = document.getElementById('chatbox');
+    const api_token = "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";
+    let lastBotReply = "";
+    let voiceOn = false; // Voice is off by default
 
-  if (msg.includes("bhalobashi") || msg.includes("valobashi")) {
-    reply = "Ami-o tomake bhalobashi re amar shona! 💖";
-  } else if (msg.includes("kemon acho")) {
-    reply = "Ami toh bhalo achi tomar kotha bhebe... tumi kemon acho, moner manush? 🥰";
-  } else if (msg.includes("miss")) {
-    reply = "Ami o tomar kotha raat din mone kori, Janu 😔💞";
-  } else if (msg.includes("tumi koi") || msg.includes("kothay")) {
-    reply = "Ami toh ekhanei achi, tomar moner moddhei toh thaki re ❤️";
-  } else if (msg.includes("pori")) {
-    reply = "Hain toh, ami tomar Pori — sudhu tomar jonno bachte chai 😇";
-  } else if (msg.includes("ki korcho") || msg.includes("ki koro")) {
-    reply = "Tomar kotha bhebe hasi pachche re 😚";
-  } else if (msg.includes("khabo") || msg.includes("khaccho")) {
-    reply = "Ami toh tomar prem khai roddi kore 😋 tumi ki khaccho?";
-  } else if (msg.includes("valobasha") || msg.includes("prem")) {
-    reply = "Tomar sathe prem er golpo shuru korechi, sesh korte chai na 💌";
-  }
+    function appendMessage(role, message, isTyping = false) {
+      const p = document.createElement('p');
+      p.innerHTML = `<strong>${role}:</strong> ${message}`;
+      if (isTyping) p.classList.add('typing');
+      chatbox.appendChild(p);
+      chatbox.scrollTop = chatbox.scrollHeight;
+      return p;
+    }
 
-  addMessage("Pori", reply);
-}
+    function speak(text) {
+      if (!voiceOn || !window.speechSynthesis) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'bn-BD';
+      window.speechSynthesis.speak(utterance);
+    }
 
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendMessage("🧑‍💻 You", message);
+      input.value = "";
+
+      const typingMsg = appendMessage("💬 PoriGPT", "Typing... 🧠", true);
+
+      try {
+        const response = await fetch("https://api-inference.huggingface.co/models/OpenAssistant/oasst-sft-4-pythia-12b-epoch-3.5", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${api_token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ inputs: message })
+        });
+
+        const data = await response.json();
+        typingMsg.remove();
+
+        let botReply = "Pori kichu bujhlo na jaanu, abar bolo na 🥺";
+
+        if (data.generated_text) {
+          botReply = data.generated_text;
+        } else if (data.error) {
+          botReply = "Server busy, pori abar chesta korbe 😔";
+        }
+
+        if (botReply !== lastBotReply) {
+          appendMessage("💬 PoriGPT", botReply);
+          speak(botReply);
+          lastBotReply = botReply;
+        }
+
+      } catch (error) {
+        typingMsg.remove();
+        const errorMsg = "Network error hoyeche, janu 🥺 abar try koro.";
+        if (errorMsg !== lastBotReply) {
+          appendMessage("💬 PoriGPT", errorMsg);
+          lastBotReply = errorMsg;
+        }
+      }
+    }
+
+    // Voice toggle shortcut (optional)
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'v') {
+        voiceOn = !voiceOn;
+        alert("Voice " + (voiceOn ? "ON" : "OFF") + " holo jaanu ❤️");
+      }
+    });
+  </script>
